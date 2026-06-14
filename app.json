@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "kishuka",
+    "name": "Kishuka",
     "slug": "kishuka",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,6 +11,7 @@
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.vadym1990athlet.kishuka",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -39,6 +40,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ff94c787-9939-4c5d-8d68-f21dc7210f27"
+      }
     }
   }
 }

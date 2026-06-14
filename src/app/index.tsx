@@ -1,62 +1,125 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
+import { ItemCard } from '@/components/sell/item-card';
+import { CartPanel, ReceiptModal } from '@/components/sell/cart-panel';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useShop } from '@/context/shop-context';
+import { formatCurrency } from '@/lib/format-currency';
+import { BottomTabInset, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
+export default function SellScreen() {
+  const router = useRouter();
+  const theme = useTheme();
+  const {
+    items,
+    cart,
+    isLoading,
+    addToCart,
+    decrementCartLine,
+    removeCartLine,
+    clearCart,
+    cartTotal,
+    cartCount,
+  } = useShop();
+  const [receiptVisible, setReceiptVisible] = useState(false);
+
+  if (isLoading) {
     return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
+      <ThemedView style={styles.centered}>
+        <ActivityIndicator size="large" color={theme.accent} />
+      </ThemedView>
     );
   }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
 
-export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+      <SafeAreaView edges={['top']} style={styles.safeArea}>
+        <View style={styles.header}>
+          <View>
+            <ThemedText type="subtitle">Kishuka</ThemedText>
+            <ThemedText type="small" themeColor="textSecondary">
+              Tap items to add to the sale
+            </ThemedText>
+          </View>
+          {cartCount > 0 ? (
+            <View style={[styles.badge, { backgroundColor: theme.accentMuted }]}>
+              <ThemedText type="smallBold" style={{ color: theme.accent }}>
+                {cartCount} in cart · {formatCurrency(cartTotal)}
+              </ThemedText>
+            </View>
+          ) : null}
+        </View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+        {items.length === 0 ? (
+          <ThemedView style={styles.emptyState}>
+            <ThemedText type="smallBold">No items yet</ThemedText>
+            <ThemedText themeColor="textSecondary" style={styles.emptyText}>
+              Add the products you sell so you can tap them quickly during checkout.
+            </ThemedText>
+            <Pressable
+              onPress={() => router.push('/items')}
+              style={({ pressed }) => [
+                styles.cta,
+                { backgroundColor: theme.accent },
+                pressed && styles.pressed,
+              ]}>
+              <ThemedText type="smallBold" style={styles.ctaText}>
+                Set up items
+              </ThemedText>
+            </Pressable>
+          </ThemedView>
+        ) : (
+          <FlatList
+            data={items}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            columnWrapperStyle={styles.gridRow}
+            contentContainerStyle={styles.gridContent}
+            renderItem={({ item }) => (
+              <ItemCard item={item} onPress={() => addToCart(item)} />
+            )}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
+        )}
       </SafeAreaView>
+
+      <View style={{ paddingBottom: BottomTabInset }}>
+        <CartPanel
+          cart={cart}
+          total={cartTotal}
+          onIncrement={(itemId) => {
+            const item = items.find((entry) => entry.id === itemId);
+            if (item) {
+              addToCart(item);
+            }
+          }}
+          onDecrement={decrementCartLine}
+          onRemove={removeCartLine}
+          onShowReceipt={() => setReceiptVisible(true)}
+          onNewSale={clearCart}
+        />
+      </View>
+
+      <ReceiptModal
+        visible={receiptVisible}
+        cart={cart}
+        total={cartTotal}
+        onClose={() => setReceiptVisible(false)}
+        onComplete={() => {
+          clearCart();
+          setReceiptVisible(false);
+        }}
+      />
     </ThemedView>
   );
 }
@@ -64,35 +127,55 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
   },
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
-  heroSection: {
+  centered: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
   },
-  title: {
+  header: {
+    paddingHorizontal: Spacing.three,
+    paddingTop: Spacing.two,
+    paddingBottom: Spacing.three,
+    gap: Spacing.two,
+  },
+  badge: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.one,
+    borderRadius: Spacing.two,
+  },
+  gridContent: {
+    paddingHorizontal: Spacing.three,
+    paddingBottom: Spacing.three,
+    gap: Spacing.two,
+  },
+  gridRow: {
+    gap: Spacing.two,
+  },
+  emptyState: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.five,
+    gap: Spacing.two,
+  },
+  emptyText: {
     textAlign: 'center',
   },
-  code: {
-    textTransform: 'uppercase',
+  cta: {
+    marginTop: Spacing.two,
+    paddingHorizontal: Spacing.four,
+    paddingVertical: Spacing.three,
+    borderRadius: Spacing.three,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  ctaText: {
+    color: '#ffffff',
+  },
+  pressed: {
+    opacity: 0.85,
   },
 });
