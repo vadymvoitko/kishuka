@@ -31,7 +31,8 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     loadItems()
-      .then(setItems)
+      .then((arg) => {setItems(arg);
+        console.log(arg)})
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -42,6 +43,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
 
   const addItem = useCallback(
     async (item: Omit<ShopItem, 'id'>) => {
+      console.log(items);
       const nextItem: ShopItem = { ...item, id: createId() };
       await persistItems([...items, nextItem]);
     },

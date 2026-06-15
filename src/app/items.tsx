@@ -35,14 +35,7 @@ export default function ItemsScreen() {
   }
 
   function confirmDelete(item: ShopItem) {
-    Alert.alert('Delete item', `Remove "${item.name}" from your shop?`, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: () => deleteItem(item.id),
-      },
-    ]);
+    deleteItem(item.id);
   }
 
   if (isLoading) {
@@ -56,13 +49,16 @@ export default function ItemsScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView edges={['top']} style={styles.safeArea}>
+        <ThemedText style={{
+          textAlign: 'center',
+          fontSize: '22px',
+          color: theme.accent,
+          fontWeight: 600,
+          marginTop: 72
+        }}>
+          Ongeza bidhaa unazouza
+        </ThemedText>
         <View style={styles.header}>
-          <View style={styles.headerText}>
-            <ThemedText type="subtitle">Shop items</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              Configure what you sell and set prices once
-            </ThemedText>
-          </View>
           <Pressable
             onPress={openAddModal}
             style={({ pressed }) => [
@@ -71,7 +67,7 @@ export default function ItemsScreen() {
               pressed && styles.pressed,
             ]}>
             <ThemedText type="smallBold" style={styles.addButtonText}>
-              + Add
+              + Ongeza
             </ThemedText>
           </Pressable>
         </View>
@@ -85,9 +81,9 @@ export default function ItemsScreen() {
           ]}
           ListEmptyComponent={
             <ThemedView style={styles.emptyState}>
-              <ThemedText type="smallBold">No items configured</ThemedText>
+              <ThemedText type="smallBold">Hakuna bidhaa</ThemedText>
               <ThemedText themeColor="textSecondary" style={styles.emptyText}>
-                Add products like sugar, soap, or cooking oil with their usual selling price.
+                Ongeza bidhaa kama sukari, sabuni, au mafuta ya kupikia pamoja na bei yake ya kawaida ya kuuza.
               </ThemedText>
             </ThemedView>
           }
@@ -100,7 +96,7 @@ export default function ItemsScreen() {
                 <View style={styles.itemInfo}>
                   <ThemedText type="smallBold">{item.name}</ThemedText>
                   <ThemedText type="small" themeColor="textSecondary">
-                    Tap to edit · hold to delete
+                    Gusa ili kuhariri, bonyeza kwa muda ili kufuta
                   </ThemedText>
                 </View>
                 <ThemedText type="smallBold" style={{ color: theme.accent }}>
@@ -144,21 +140,21 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
+    justifyContent: 'flex-end',
+    gap: Spacing.one,
     paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.two,
-    paddingBottom: Spacing.three,
+    marginTop: Spacing.two,
+    paddingBottom: Spacing.two,
   },
   headerText: {
     flex: 1,
-    gap: 4,
+    gap: 1,
   },
   addButton: {
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
     borderRadius: Spacing.three,
-    marginTop: 60
+    marginTop: 0
   },
   addButtonText: {
     color: '#ffffff'

@@ -38,56 +38,56 @@ export function CartPanel({
   if (cart.length === 0) {
     return (
       <ThemedView type="backgroundElement" style={styles.emptyPanel}>
-        <ThemedText themeColor="textSecondary">Tap items above to start a sale</ThemedText>
+        <ThemedText themeColor="textSecondary">Gusa bidhaa hapo juu ili kuanza kuuza</ThemedText>
       </ThemedView>
     );
   }
 
   return (
     <ThemedView type="backgroundElement" style={styles.panel}>
-      <ScrollView style={styles.lines} nestedScrollEnabled>
-        {cart.map((line) => (
-          <View key={line.itemId} style={styles.line}>
-            <View style={styles.lineInfo}>
-              <ThemedText type="smallBold" numberOfLines={1}>
-                {line.name}
-              </ThemedText>
-              <ThemedText type="small" themeColor="textSecondary">
-                {formatCurrency(line.price)} each
-              </ThemedText>
-            </View>
+      {/*<ScrollView style={styles.lines} nestedScrollEnabled>*/}
+      {/*  {cart.map((line) => (*/}
+      {/*    <View key={line.itemId} style={styles.line}>*/}
+      {/*      <View style={styles.lineInfo}>*/}
+      {/*        <ThemedText type="smallBold" numberOfLines={1}>*/}
+      {/*          {line.name}*/}
+      {/*        </ThemedText>*/}
+      {/*        <ThemedText type="small" themeColor="textSecondary">*/}
+      {/*          {formatCurrency(line.price)} kila*/}
+      {/*        </ThemedText>*/}
+      {/*      </View>*/}
 
-            <View style={styles.qtyControls}>
-              <Pressable
-                onPress={() => onDecrement(line.itemId)}
-                style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>
-                <ThemedText type="smallBold">−</ThemedText>
-              </Pressable>
-              <ThemedText type="smallBold" style={styles.qty}>
-                {line.quantity}
-              </ThemedText>
-              <Pressable
-                onPress={() => onIncrement(line.itemId)}
-                style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>
-                <ThemedText type="smallBold">+</ThemedText>
-              </Pressable>
-            </View>
+      {/*      <View style={styles.qtyControls}>*/}
+      {/*        <Pressable*/}
+      {/*          onPress={() => onDecrement(line.itemId)}*/}
+      {/*          style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>*/}
+      {/*          <ThemedText type="smallBold">−</ThemedText>*/}
+      {/*        </Pressable>*/}
+      {/*        <ThemedText type="smallBold" style={styles.qty}>*/}
+      {/*          {line.quantity}*/}
+      {/*        </ThemedText>*/}
+      {/*        <Pressable*/}
+      {/*          onPress={() => onIncrement(line.itemId)}*/}
+      {/*          style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>*/}
+      {/*          <ThemedText type="smallBold">+</ThemedText>*/}
+      {/*        </Pressable>*/}
+      {/*      </View>*/}
 
-            <View style={styles.lineTotal}>
-              <ThemedText type="smallBold">{formatCurrency(line.price * line.quantity)}</ThemedText>
-              <Pressable onPress={() => onRemove(line.itemId)} hitSlop={8}>
-                <ThemedText type="small" style={{ color: theme.danger }}>
-                  Remove
-                </ThemedText>
-              </Pressable>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
+      {/*      <View style={styles.lineTotal}>*/}
+      {/*        <ThemedText type="smallBold">{formatCurrency(line.price * line.quantity)}</ThemedText>*/}
+      {/*        <Pressable onPress={() => onRemove(line.itemId)} hitSlop={8}>*/}
+      {/*          <ThemedText type="small" style={{ color: theme.danger }}>*/}
+      {/*            Futa*/}
+      {/*          </ThemedText>*/}
+      {/*        </Pressable>*/}
+      {/*      </View>*/}
+      {/*    </View>*/}
+      {/*  ))}*/}
+      {/*</ScrollView>*/}
 
       <View style={styles.footer}>
         <View style={styles.totalRow}>
-          <ThemedText type="subtitle">Total</ThemedText>
+          <ThemedText type="subtitle">Jumla</ThemedText>
           <ThemedText type="subtitle" style={{ color: theme.accent }}>
             {formatCurrency(total)}
           </ThemedText>
@@ -97,7 +97,7 @@ export function CartPanel({
           <Pressable
             onPress={onNewSale}
             style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
-            <ThemedText type="smallBold">New sale</ThemedText>
+            <ThemedText type="smallBold">Mauzo mapya</ThemedText>
           </Pressable>
           <Pressable
             onPress={onShowReceipt}
@@ -107,7 +107,7 @@ export function CartPanel({
               pressed && styles.pressed,
             ]}>
             <ThemedText type="smallBold" style={styles.primaryButtonText}>
-              Receipt
+              Risiti
             </ThemedText>
           </Pressable>
         </View>
@@ -133,7 +133,7 @@ export function ReceiptModal({ visible, cart, total, onClose, onComplete }: Rece
       <View style={styles.modalOverlay}>
         <ThemedView style={styles.modalContent}>
           <ThemedText type="subtitle" style={styles.receiptTitle}>
-            Receipt
+            Risiti
           </ThemedText>
           <ThemedText type="small" themeColor="textSecondary" style={styles.receiptDate}>
             {now.toLocaleString('sw-TZ')}
@@ -155,7 +155,7 @@ export function ReceiptModal({ visible, cart, total, onClose, onComplete }: Rece
           />
 
           <View style={styles.receiptTotal}>
-            <ThemedText type="subtitle">Total to pay</ThemedText>
+            <ThemedText type="subtitle">Jumla</ThemedText>
             <ThemedText type="subtitle" style={{ color: theme.accent }}>
               {formatCurrency(total)}
             </ThemedText>
@@ -165,7 +165,7 @@ export function ReceiptModal({ visible, cart, total, onClose, onComplete }: Rece
             <Pressable
               onPress={onClose}
               style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
-              <ThemedText type="smallBold">Back</ThemedText>
+              <ThemedText type="smallBold">Rudi</ThemedText>
             </Pressable>
             <Pressable
               onPress={onComplete}
@@ -175,7 +175,7 @@ export function ReceiptModal({ visible, cart, total, onClose, onComplete }: Rece
                 pressed && styles.pressed,
               ]}>
               <ThemedText type="smallBold" style={styles.primaryButtonText}>
-                Done — new sale
+                Tajari - Mauzo mapya
               </ThemedText>
             </Pressable>
           </View>
@@ -195,8 +195,9 @@ const styles = StyleSheet.create({
   panel: {
     borderTopLeftRadius: Spacing.four,
     borderTopRightRadius: Spacing.four,
-    paddingTop: Spacing.three,
-    maxHeight: '45%',
+    paddingTop: Spacing.one,
+    maxHeight: '100%',
+    marginBottom: 10
   },
   lines: {
     paddingHorizontal: Spacing.three,

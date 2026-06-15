@@ -62,15 +62,15 @@ export function ItemFormModal({ visible, item, onClose, onSave }: ItemFormModalP
         <Pressable style={styles.backdrop} onPress={onClose} />
         <ThemedView style={styles.sheet}>
           <ThemedText type="subtitle" style={styles.title}>
-            {item ? 'Edit item' : 'Add item'}
+            {item ? 'Kuhariri bidhaa' : 'Ongeza bidhaa'}
           </ThemedText>
 
           <View style={styles.field}>
-            <ThemedText type="smallBold">Name</ThemedText>
+            <ThemedText type="smallBold">Jina</ThemedText>
             <TextInput
               value={name}
               onChangeText={setName}
-              placeholder="e.g. Sugar 1kg"
+              placeholder="mfano Sukari robo"
               placeholderTextColor={theme.textSecondary}
               style={[styles.input, { color: theme.text, borderColor: theme.backgroundSelected }]}
               autoFocus
@@ -78,11 +78,11 @@ export function ItemFormModal({ visible, item, onClose, onSave }: ItemFormModalP
           </View>
 
           <View style={styles.field}>
-            <ThemedText type="smallBold">Price (TZS)</ThemedText>
+            <ThemedText type="smallBold">Bei (TZS)</ThemedText>
             <TextInput
               value={price}
               onChangeText={setPrice}
-              placeholder="e.g. 3500"
+              placeholder="mfano 2500"
               placeholderTextColor={theme.textSecondary}
               keyboardType="number-pad"
               style={[styles.input, { color: theme.text, borderColor: theme.backgroundSelected }]}
@@ -99,7 +99,7 @@ export function ItemFormModal({ visible, item, onClose, onSave }: ItemFormModalP
             <Pressable
               onPress={onClose}
               style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}>
-              <ThemedText type="smallBold">Cancel</ThemedText>
+              <ThemedText type="smallBold">Ghairi</ThemedText>
             </Pressable>
             <Pressable
               onPress={handleSave}
@@ -109,7 +109,7 @@ export function ItemFormModal({ visible, item, onClose, onSave }: ItemFormModalP
                 pressed && styles.pressed,
               ]}>
               <ThemedText type="smallBold" style={styles.primaryButtonText}>
-                Save
+                Hifadhi
               </ThemedText>
             </Pressable>
           </View>

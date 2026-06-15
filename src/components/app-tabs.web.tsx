@@ -20,10 +20,10 @@ export default function AppTabs() {
       <TabList asChild>
         <CustomTabList>
           <TabTrigger name="sell" href="/" asChild>
-            <TabButton>Sell</TabButton>
+            <TabButton>Hisabu</TabButton>
           </TabTrigger>
           <TabTrigger name="items" href="/items" asChild>
-            <TabButton>Items</TabButton>
+            <TabButton>Dhibiti vitu</TabButton>
           </TabTrigger>
         </CustomTabList>
       </TabList>
@@ -52,9 +52,9 @@ export function CustomTabList(props: TabListProps) {
   return (
     <View {...props} style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
-        <ThemedText type="smallBold" style={[styles.brandText, { color: colors.accent }]}>
-          Kishuka
-        </ThemedText>
+        {/*<ThemedText type="smallBold" style={[styles.brandText, { color: colors.accent }]}>*/}
+        {/*  Kishuka*/}
+        {/*</ThemedText>*/}
 
         {props.children}
       </ThemedView>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     padding: Spacing.three,
-    justifyContent: 'center',
+    justifyContent: 'end',
     alignItems: 'center',
     flexDirection: 'row',
   },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexGrow: 1,
     gap: Spacing.two,
-    maxWidth: MaxContentWidth,
+    maxWidth: '240px',
   },
   brandText: {
     marginRight: 'auto',

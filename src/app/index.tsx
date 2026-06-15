@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 
 import { ItemCard } from '@/components/sell/item-card';
 import { CartPanel, ReceiptModal } from '@/components/sell/cart-panel';
+import { CartPanelMain } from '@/components/sell/cart-panel-main';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useShop } from '@/context/shop-context';
@@ -47,25 +48,29 @@ export default function SellScreen() {
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         <View style={styles.header}>
           <View>
-            <ThemedText type="subtitle">Kishuka</ThemedText>
-            <ThemedText type="small" themeColor="textSecondary">
-              Tap items to add to the sale
+            <ThemedText style={{
+              textAlign: 'center',
+              fontSize: '22px',
+              color: theme.accent,
+              fontWeight: 600
+            }}>
+              Chagua bidhaa unazouza
             </ThemedText>
           </View>
-          {cartCount > 0 ? (
-            <View style={[styles.badge, { backgroundColor: theme.accentMuted }]}>
-              <ThemedText type="smallBold" style={{ color: theme.accent }}>
-                {cartCount} in cart · {formatCurrency(cartTotal)}
-              </ThemedText>
-            </View>
-          ) : null}
+          {/*{cartCount > 0 ? (*/}
+          {/*  <View style={[styles.badge, { backgroundColor: theme.accentMuted }]}>*/}
+          {/*    <ThemedText type="smallBold" style={{ color: theme.accent }}>*/}
+          {/*      {cartCount} in cart · {formatCurrency(cartTotal)}*/}
+          {/*    </ThemedText>*/}
+          {/*  </View>*/}
+          {/*) : null}*/}
         </View>
 
         {items.length === 0 ? (
           <ThemedView style={styles.emptyState}>
             <ThemedText type="smallBold">No items yet</ThemedText>
             <ThemedText themeColor="textSecondary" style={styles.emptyText}>
-              Add the products you sell so you can tap them quickly during checkout.
+              Ongeza bidhaa unazouza ili uweze kuzigusa haraka wakati wa malipo.
             </ThemedText>
             <Pressable
               onPress={() => router.push('/items')}
@@ -75,7 +80,7 @@ export default function SellScreen() {
                 pressed && styles.pressed,
               ]}>
               <ThemedText type="smallBold" style={styles.ctaText}>
-                Set up items
+                Weka bidhaa
               </ThemedText>
             </Pressable>
           </ThemedView>
@@ -92,6 +97,20 @@ export default function SellScreen() {
           />
         )}
       </SafeAreaView>
+
+      <View>
+        <CartPanelMain
+            cart={cart}
+            total={cartTotal}
+            onIncrement={(itemId) => {
+              const item = items.find((entry) => entry.id === itemId);
+              if (item) {
+                addToCart(item);
+              }
+            }}
+            onDecrement={decrementCartLine}
+        />
+      </View>
 
       <View style={{ paddingBottom: BottomTabInset }}>
         <CartPanel
@@ -138,9 +157,10 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.two,
-    paddingBottom: Spacing.three,
-    gap: Spacing.two,
+    paddingTop: Spacing.six,
+    paddingBottom: Spacing.four,
+    marginTop: Spacing.two,
+    gap: Spacing.two
   },
   badge: {
     alignSelf: 'flex-start',
