@@ -1,22 +1,23 @@
 {
   "expo": {
-    "name": "Kishuka",
-    "slug": "kishuka",
+    "name": "Dukani",
+    "slug": "dukani",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "kishuka",
+    "icon": "./assets/images/android-icon-foreground.png",
+    "scheme": "dukani",
     "userInterfaceStyle": "automatic",
-    "ios": {
-      "icon": "./assets/expo.icon"
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#EBEBEB"
     },
     "android": {
-      "package": "com.vadym1990athlet.kishuka",
+      "package": "com.vadym1990athlet.dukani",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#EBEBEB",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
     },
@@ -29,10 +30,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#EBEBEB",
           "android": {
-            "image": "./assets/images/splash-icon.png",
-            "imageWidth": 76
+            "image": "./assets/images/splash.png"
           }
         }
       ]

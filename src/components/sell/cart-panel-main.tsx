@@ -42,7 +42,7 @@ export function CartPanelMain({
                 {line.name}
               </ThemedText>
               <ThemedText type="small" themeColor="textSecondary">
-                {formatCurrency(line.price)} kila
+                {formatCurrency(line.price)} kila moja
               </ThemedText>
             </View>
 
@@ -50,7 +50,7 @@ export function CartPanelMain({
               <Pressable
                 onPress={() => onDecrement(line.itemId)}
                 style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>
-                <ThemedText type="smallBold">−</ThemedText>
+                <ThemedText style={[styles.plus]} type="smallBold">−</ThemedText>
               </Pressable>
               <ThemedText type="smallBold" style={styles.qty}>
                 {line.quantity}
@@ -58,17 +58,13 @@ export function CartPanelMain({
               <Pressable
                 onPress={() => onIncrement(line.itemId)}
                 style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>
-                <ThemedText type="smallBold">+</ThemedText>
+                <ThemedText style={[styles.plus]} type="smallBold">+</ThemedText>
               </Pressable>
             </View>
 
             <View style={styles.lineTotal}>
               <ThemedText type="smallBold">{formatCurrency(line.price * line.quantity)}</ThemedText>
-              <Pressable onPress={() => onRemove(line.itemId)} hitSlop={8}>
-                <ThemedText type="small" style={{ color: theme.danger }}>
-                  Futa
-                </ThemedText>
-              </Pressable>
+
             </View>
           </View>
         ))}
@@ -107,8 +103,8 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
   },
   qtyButton: {
-    width: 32,
-    height: 32,
+    width: 50,
+    height: 40,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
@@ -117,6 +113,9 @@ const styles = StyleSheet.create({
   qty: {
     minWidth: 24,
     textAlign: 'center',
+  },
+  plus: {
+    fontSize: 22
   },
   lineTotal: {
     alignItems: 'flex-end',

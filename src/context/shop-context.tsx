@@ -31,8 +31,15 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     loadItems()
-      .then((arg) => {setItems(arg);
-        console.log(arg)})
+      .then((arg) => {
+        setItems(arg);
+        setCart(arg.map(el => ({
+          itemId: el.id,
+          name: el.name,
+          price: el.price,
+          quantity: 0,
+        })));
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -90,9 +97,9 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
     setCart((current) =>
       current
         .map((line) =>
-          line.itemId === itemId ? { ...line, quantity: line.quantity - 1 } : line,
+          line.itemId === itemId ? { ...line, quantity: !!line.quantity ? line.quantity - 1 : 0 } : line,
         )
-        .filter((line) => line.quantity > 0),
+        // .filter((line) => line.quantity > 0),
     );
   }, []);
 

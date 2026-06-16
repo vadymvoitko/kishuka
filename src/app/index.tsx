@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import {useFocusEffect, useRouter} from 'expo-router';
 
 import { ItemCard } from '@/components/sell/item-card';
 import { CartPanel, ReceiptModal } from '@/components/sell/cart-panel';
@@ -18,8 +18,14 @@ import { useShop } from '@/context/shop-context';
 import { formatCurrency } from '@/lib/format-currency';
 import { BottomTabInset, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import type {CartLine} from "../types/shop";
 
 export default function SellScreen() {
+  const [cartItems, setCart] = useState<CartLine[]>([]);
+  const cartTotal = useMemo(
+      () => cartItems.reduce((sum, line) => sum + line.price * line.quantity, 0),
+      [cartItems],
+  );
   const router = useRouter();
   const theme = useTheme();
   const {
@@ -30,10 +36,24 @@ export default function SellScreen() {
     decrementCartLine,
     removeCartLine,
     clearCart,
-    cartTotal,
+    // cartTotal,
     cartCount,
   } = useShop();
   const [receiptVisible, setReceiptVisible] = useState(false);
+
+  useFocusEffect(
+      useCallback(() => {
+        setCart(items.map(el => {
+          const obj = cart.find(e => e.itemId === el.id) || {};
+          return {
+            ...el,
+            itemId: el.id,
+            quantity: typeof obj.quantity !== 'undefined' ? obj.quantity : 0
+          }
+        }))
+        return () => ({});
+      }, [items, cart])
+  );
 
   if (isLoading) {
     return (
@@ -85,32 +105,21 @@ export default function SellScreen() {
             </Pressable>
           </ThemedView>
         ) : (
-          <FlatList
-            data={items}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            columnWrapperStyle={styles.gridRow}
-            contentContainerStyle={styles.gridContent}
-            renderItem={({ item }) => (
-              <ItemCard item={item} onPress={() => addToCart(item)} />
-            )}
-          />
+            <View>
+              <CartPanelMain
+                  cart={cartItems}
+                  total={cartTotal}
+                  onIncrement={(itemId) => {
+                    const item = items.find((entry) => entry.id === itemId);
+                    if (item) {
+                      addToCart(item);
+                    }
+                  }}
+                  onDecrement={decrementCartLine}
+              />
+            </View>
         )}
       </SafeAreaView>
-
-      <View>
-        <CartPanelMain
-            cart={cart}
-            total={cartTotal}
-            onIncrement={(itemId) => {
-              const item = items.find((entry) => entry.id === itemId);
-              if (item) {
-                addToCart(item);
-              }
-            }}
-            onDecrement={decrementCartLine}
-        />
-      </View>
 
       <View style={{ paddingBottom: BottomTabInset }}>
         <CartPanel
@@ -131,7 +140,7 @@ export default function SellScreen() {
 
       <ReceiptModal
         visible={receiptVisible}
-        cart={cart}
+        cart={cartItems}
         total={cartTotal}
         onClose={() => setReceiptVisible(false)}
         onComplete={() => {

@@ -3,7 +3,7 @@ import {
   Modal,
   Pressable,
   ScrollView,
-  StyleSheet,
+  StyleSheet, TextInput,
   View,
 } from 'react-native';
 
@@ -13,6 +13,7 @@ import { formatCurrency } from '@/lib/format-currency';
 import type { CartLine } from '@/types/shop';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import {useEffect, useState} from "react";
 
 type CartPanelProps = {
   cart: CartLine[];
@@ -45,45 +46,6 @@ export function CartPanel({
 
   return (
     <ThemedView type="backgroundElement" style={styles.panel}>
-      {/*<ScrollView style={styles.lines} nestedScrollEnabled>*/}
-      {/*  {cart.map((line) => (*/}
-      {/*    <View key={line.itemId} style={styles.line}>*/}
-      {/*      <View style={styles.lineInfo}>*/}
-      {/*        <ThemedText type="smallBold" numberOfLines={1}>*/}
-      {/*          {line.name}*/}
-      {/*        </ThemedText>*/}
-      {/*        <ThemedText type="small" themeColor="textSecondary">*/}
-      {/*          {formatCurrency(line.price)} kila*/}
-      {/*        </ThemedText>*/}
-      {/*      </View>*/}
-
-      {/*      <View style={styles.qtyControls}>*/}
-      {/*        <Pressable*/}
-      {/*          onPress={() => onDecrement(line.itemId)}*/}
-      {/*          style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>*/}
-      {/*          <ThemedText type="smallBold">−</ThemedText>*/}
-      {/*        </Pressable>*/}
-      {/*        <ThemedText type="smallBold" style={styles.qty}>*/}
-      {/*          {line.quantity}*/}
-      {/*        </ThemedText>*/}
-      {/*        <Pressable*/}
-      {/*          onPress={() => onIncrement(line.itemId)}*/}
-      {/*          style={({ pressed }) => [styles.qtyButton, pressed && styles.pressed]}>*/}
-      {/*          <ThemedText type="smallBold">+</ThemedText>*/}
-      {/*        </Pressable>*/}
-      {/*      </View>*/}
-
-      {/*      <View style={styles.lineTotal}>*/}
-      {/*        <ThemedText type="smallBold">{formatCurrency(line.price * line.quantity)}</ThemedText>*/}
-      {/*        <Pressable onPress={() => onRemove(line.itemId)} hitSlop={8}>*/}
-      {/*          <ThemedText type="small" style={{ color: theme.danger }}>*/}
-      {/*            Futa*/}
-      {/*          </ThemedText>*/}
-      {/*        </Pressable>*/}
-      {/*      </View>*/}
-      {/*    </View>*/}
-      {/*  ))}*/}
-      {/*</ScrollView>*/}
 
       <View style={styles.footer}>
         <View style={styles.totalRow}>
@@ -127,6 +89,12 @@ type ReceiptModalProps = {
 export function ReceiptModal({ visible, cart, total, onClose, onComplete }: ReceiptModalProps) {
   const theme = useTheme();
   const now = new Date();
+  const [upTotal, setUpTotal] = useState(0);
+  useEffect(() => {
+    if (total % 1000 !== 0) {
+      setUpTotal(Math.ceil(total / 1000) * 1000);
+    } else setUpTotal(Math.ceil((total + 1) / 5000) * 5000);
+  }, [total])
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
@@ -158,6 +126,31 @@ export function ReceiptModal({ visible, cart, total, onClose, onComplete }: Rece
             <ThemedText type="subtitle">Jumla</ThemedText>
             <ThemedText type="subtitle" style={{ color: theme.accent }}>
               {formatCurrency(total)}
+            </ThemedText>
+          </View>
+
+          <View style={styles.receiptTotal}>
+            <ThemedText type="subtitle">Chengi </ThemedText>
+            <TextInput
+                value={upTotal}
+                onChangeText={setUpTotal}
+                keyboardType="number-pad"
+                style={[{
+                  borderWidth: 2,
+                  borderColor: '#2563EB', // blue
+                  borderRadius: 6,
+                  paddingHorizontal: 4,
+                  paddingVertical: 4,
+                  fontSize: 16,
+                  fontWeight: '600',
+                  color: '#111827',
+                  backgroundColor: '#FFFFFF',
+                  width: '20%'
+                }]}
+                autoFocus
+            />
+            <ThemedText type="subtitle" style={{ color: theme.accent }}>
+              {formatCurrency(upTotal - total)}
             </ThemedText>
           </View>
 
@@ -311,6 +304,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: Spacing.three,
     marginTop: Spacing.two,
+    marginBottom: Spacing.two,
     borderTopWidth: 2,
     borderTopColor: '#00000022',
   },
