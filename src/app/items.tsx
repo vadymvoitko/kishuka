@@ -51,10 +51,10 @@ export default function ItemsScreen() {
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         <ThemedText style={{
           textAlign: 'center',
-          fontSize: '22px',
+          fontSize: 22,
           color: theme.accent,
           fontWeight: 600,
-          marginTop: 72
+          marginTop: 12
         }}>
           Ongeza bidhaa unazouza
         </ThemedText>

@@ -1,24 +1,37 @@
-import { NativeTabs } from 'expo-router/unstable-native-tabs';
+import { Tabs } from 'expo-router';
 import { useColorScheme } from 'react-native';
 
 import { Colors } from '@/constants/theme';
 
 export default function AppTabs() {
-  const scheme = useColorScheme();
-  const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+    const scheme = useColorScheme();
+    const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
 
-  return (
-    <NativeTabs
-      backgroundColor={colors.background}
-      indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
-      <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Hisabu kwa kuuza</NativeTabs.Trigger.Label>
-      </NativeTabs.Trigger>
+    return (
+        <Tabs
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: colors.background,
+                    borderTopColor: 'transparent',
+                },
+                tabBarActiveTintColor: colors.text,
+                tabBarInactiveTintColor: colors.text + '99',
+            }}
+        >
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: 'Hisabu kwa kuuza',
+                }}
+            />
 
-      <NativeTabs.Trigger name="items">
-        <NativeTabs.Trigger.Label>Dhibiti bidhaa</NativeTabs.Trigger.Label>
-      </NativeTabs.Trigger>
-    </NativeTabs>
-  );
+            <Tabs.Screen
+                name="items"
+                options={{
+                    title: 'Dhibiti bidhaa',
+                }}
+            />
+        </Tabs>
+    );
 }

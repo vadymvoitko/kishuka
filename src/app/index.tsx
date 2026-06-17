@@ -1,7 +1,6 @@
 import {useCallback, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
-  FlatList,
   Pressable,
   StyleSheet,
   View,
@@ -9,13 +8,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {useFocusEffect, useRouter} from 'expo-router';
 
-import { ItemCard } from '@/components/sell/item-card';
 import { CartPanel, ReceiptModal } from '@/components/sell/cart-panel';
 import { CartPanelMain } from '@/components/sell/cart-panel-main';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useShop } from '@/context/shop-context';
-import { formatCurrency } from '@/lib/format-currency';
 import { BottomTabInset, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 import type {CartLine} from "../types/shop";
@@ -36,13 +33,12 @@ export default function SellScreen() {
     decrementCartLine,
     removeCartLine,
     clearCart,
-    // cartTotal,
-    cartCount,
   } = useShop();
   const [receiptVisible, setReceiptVisible] = useState(false);
 
   useFocusEffect(
       useCallback(() => {
+        console.log('focusEffect', items.length)
         setCart(items.map(el => {
           const obj = cart.find(e => e.itemId === el.id) || {};
           return {
@@ -70,20 +66,13 @@ export default function SellScreen() {
           <View>
             <ThemedText style={{
               textAlign: 'center',
-              fontSize: '22px',
+              fontSize: 22,
               color: theme.accent,
               fontWeight: 600
             }}>
               Chagua bidhaa unazouza
             </ThemedText>
           </View>
-          {/*{cartCount > 0 ? (*/}
-          {/*  <View style={[styles.badge, { backgroundColor: theme.accentMuted }]}>*/}
-          {/*    <ThemedText type="smallBold" style={{ color: theme.accent }}>*/}
-          {/*      {cartCount} in cart · {formatCurrency(cartTotal)}*/}
-          {/*    </ThemedText>*/}
-          {/*  </View>*/}
-          {/*) : null}*/}
         </View>
 
         {items.length === 0 ? (
@@ -105,7 +94,7 @@ export default function SellScreen() {
             </Pressable>
           </ThemedView>
         ) : (
-            <View>
+            <SafeAreaView style={{ flex: 1 }}>
               <CartPanelMain
                   cart={cartItems}
                   total={cartTotal}
@@ -117,7 +106,7 @@ export default function SellScreen() {
                   }}
                   onDecrement={decrementCartLine}
               />
-            </View>
+            </SafeAreaView>
         )}
       </SafeAreaView>
 
@@ -166,9 +155,9 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: Spacing.three,
-    paddingTop: Spacing.six,
+    paddingTop: Spacing.two,
     paddingBottom: Spacing.four,
-    marginTop: Spacing.two,
+    marginTop: Spacing.one,
     gap: Spacing.two
   },
   badge: {

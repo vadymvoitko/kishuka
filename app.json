@@ -1,17 +1,12 @@
 {
   "expo": {
     "name": "Dukani",
-    "slug": "dukani",
+    "slug": "kishuka",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/android-icon-foreground.png",
     "scheme": "dukani",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#EBEBEB"
-    },
     "android": {
       "package": "com.vadym1990athlet.dukani",
       "adaptiveIcon": {

@@ -1,95 +1,37 @@
-import {
-  Tabs,
-  TabList,
-  TabTrigger,
-  TabSlot,
-  TabTriggerSlotProps,
-  TabListProps,
-} from 'expo-router/ui';
-import { Pressable, useColorScheme, View, StyleSheet } from 'react-native';
+import { Tabs } from 'expo-router';
+import { useColorScheme } from 'react-native';
 
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
-
-import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { Colors } from '@/constants/theme';
 
 export default function AppTabs() {
-  return (
-    <Tabs>
-      <TabSlot style={{ height: '100%' }} />
-      <TabList asChild>
-        <CustomTabList>
-          <TabTrigger name="sell" href="/" asChild>
-            <TabButton>Hisabu</TabButton>
-          </TabTrigger>
-          <TabTrigger name="items" href="/items" asChild>
-            <TabButton>Dhibiti vitu</TabButton>
-          </TabTrigger>
-        </CustomTabList>
-      </TabList>
-    </Tabs>
-  );
-}
-
-export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
-  return (
-    <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
-      <ThemedView
-        type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
-        style={styles.tabButtonView}>
-        <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
-          {children}
-        </ThemedText>
-      </ThemedView>
-    </Pressable>
-  );
-}
-
-export function CustomTabList(props: TabListProps) {
   const scheme = useColorScheme();
   const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
 
   return (
-    <View {...props} style={styles.tabListContainer}>
-      <ThemedView type="backgroundElement" style={styles.innerContainer}>
-        {/*<ThemedText type="smallBold" style={[styles.brandText, { color: colors.accent }]}>*/}
-        {/*  Kishuka*/}
-        {/*</ThemedText>*/}
+      <Tabs
+          screenOptions={{
+            headerShown: false,
+            tabBarStyle: {
+              backgroundColor: colors.background,
+              borderTopColor: 'transparent',
+            },
+            tabBarActiveTintColor: colors.text,
+            tabBarInactiveTintColor: colors.text + '99',
+          }}
+      >
+        <Tabs.Screen
+            name="index"
+            options={{
+              title: 'Hisabu kwa kuuza',
+            }}
+        />
 
-        {props.children}
-      </ThemedView>
-    </View>
+        <Tabs.Screen
+            name="items"
+            options={{
+              title: 'Dhibiti bidhaa',
+            }}
+        />
+      </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  tabListContainer: {
-    position: 'absolute',
-    width: '100%',
-    padding: Spacing.three,
-    justifyContent: 'end',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  innerContainer: {
-    paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.five,
-    borderRadius: Spacing.five,
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexGrow: 1,
-    gap: Spacing.two,
-    maxWidth: '240px',
-  },
-  brandText: {
-    marginRight: 'auto',
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  tabButtonView: {
-    paddingVertical: Spacing.one,
-    paddingHorizontal: Spacing.three,
-    borderRadius: Spacing.three,
-  },
-});

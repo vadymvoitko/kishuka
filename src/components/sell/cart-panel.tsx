@@ -2,7 +2,6 @@ import {
   FlatList,
   Modal,
   Pressable,
-  ScrollView,
   StyleSheet, TextInput,
   View,
 } from 'react-native';
@@ -28,15 +27,12 @@ type CartPanelProps = {
 export function CartPanel({
   cart,
   total,
-  onIncrement,
-  onDecrement,
-  onRemove,
   onShowReceipt,
   onNewSale,
 }: CartPanelProps) {
   const theme = useTheme();
 
-  if (cart.length === 0) {
+  if (cart.length === 0 || cart.every(el => +el.quantity === 0)) {
     return (
       <ThemedView type="backgroundElement" style={styles.emptyPanel}>
         <ThemedText themeColor="textSecondary">Gusa bidhaa hapo juu ili kuanza kuuza</ThemedText>
@@ -89,11 +85,12 @@ type ReceiptModalProps = {
 export function ReceiptModal({ visible, cart, total, onClose, onComplete }: ReceiptModalProps) {
   const theme = useTheme();
   const now = new Date();
-  const [upTotal, setUpTotal] = useState(0);
+  const [upTotal, setUpTotal] = useState('0');
   useEffect(() => {
+    console.log('cartPanel');
     if (total % 1000 !== 0) {
-      setUpTotal(Math.ceil(total / 1000) * 1000);
-    } else setUpTotal(Math.ceil((total + 1) / 5000) * 5000);
+      setUpTotal(String(Math.ceil(total / 1000) * 1000));
+    } else setUpTotal(String(Math.ceil((total + 1) / 5000) * 5000));
   }, [total])
 
   return (
@@ -133,7 +130,7 @@ export function ReceiptModal({ visible, cart, total, onClose, onComplete }: Rece
             <ThemedText type="subtitle">Chengi </ThemedText>
             <TextInput
                 value={upTotal}
-                onChangeText={setUpTotal}
+                onChangeText={value => setUpTotal(String(value))}
                 keyboardType="number-pad"
                 style={[{
                   borderWidth: 2,
@@ -147,7 +144,6 @@ export function ReceiptModal({ visible, cart, total, onClose, onComplete }: Rece
                   backgroundColor: '#FFFFFF',
                   width: '20%'
                 }]}
-                autoFocus
             />
             <ThemedText type="subtitle" style={{ color: theme.accent }}>
               {formatCurrency(upTotal - total)}
@@ -271,8 +267,9 @@ const styles = StyleSheet.create({
   modalContent: {
     borderTopLeftRadius: Spacing.four,
     borderTopRightRadius: Spacing.four,
-    padding: Spacing.four,
+    padding: Spacing.three,
     maxHeight: '85%',
+    paddingBottom: 50
   },
   receiptTitle: {
     textAlign: 'center',

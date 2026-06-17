@@ -50,7 +50,6 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
 
   const addItem = useCallback(
     async (item: Omit<ShopItem, 'id'>) => {
-      console.log(items);
       const nextItem: ShopItem = { ...item, id: createId() };
       await persistItems([...items, nextItem]);
     },
